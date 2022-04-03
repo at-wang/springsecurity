@@ -1,6 +1,7 @@
 package cn.atwang.springsecurity.config;
 
 import cn.atwang.springsecurity.filter.JwtTokenFilter;
+import cn.atwang.springsecurity.handler.AWSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationEntryPoint authenticationEntryPoint;
 
+    @Autowired
+    private AWSuccessHandler awSuccessHandler;
+
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -39,6 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //自定义认证成功调用
+        http.formLogin().successHandler(awSuccessHandler);
+
         http
                 //关闭csrf
                 .csrf().disable()
@@ -60,6 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(authenticationEntryPoint)
                 //把自定义的授权异常处理器配置到security
                 .accessDeniedHandler(accessDeniedHandler);
+
+        //允许跨域
+        http.cors();
     }
 
     //创建BCryptPasswordEncoder注入容器

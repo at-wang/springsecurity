@@ -45,4 +45,14 @@ public class UserDaoTest {
         LoginUser loginUser = JSON.parseObject(s, LoginUser.class);
         System.out.println(loginUser);
     }
+    @Test
+    public void test2(){
+        User user = userDao.selectById(1);
+        System.out.println(user);
+        System.out.println("-------------------");
+        User user2 = userDao.selectById(1);
+        System.out.println(user2);
+    }
+
+
 }
